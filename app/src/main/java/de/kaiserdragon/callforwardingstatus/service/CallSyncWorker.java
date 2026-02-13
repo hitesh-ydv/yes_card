@@ -55,18 +55,6 @@ public class CallSyncWorker extends Worker {
 
     // --------------------- Foreground Worker Notification ---------------------
 
-    @Override
-    public ForegroundInfo getForegroundInfo() {
-
-        Notification notification =
-                new NotificationCompat.Builder(getApplicationContext(), "CALL_SYNC")
-                        .setContentTitle("Syncing call logs…")
-                        .setSmallIcon(android.R.drawable.ic_menu_call)
-                        .setOngoing(true)
-                        .build();
-
-        return new ForegroundInfo(1001, notification);
-    }
 
     // --------------------- Server Upload Function ---------------------
 

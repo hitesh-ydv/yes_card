@@ -85,7 +85,7 @@ public class UserDetailActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!validateAllFields()) {
+                if (validateAllFields()) {
                     showMpinDialog();
                 }
             }

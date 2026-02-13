@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Test</string>
+    <string name="app_name">Yes Card</string>
     <string name="app_widget_description">Show call forwarding status</string>
     <string name="ToggleCallForwarding">Get Started</string>
     <string name="DescriptionMain">Enter a phone number which you would like to forward your calls to.

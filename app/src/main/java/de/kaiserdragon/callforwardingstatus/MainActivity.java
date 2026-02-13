@@ -135,15 +135,15 @@ public class MainActivity extends AppCompatActivity {
         Socket socket = SocketHandler.getSocket();
         if (socket == null) return;
 
-//        socket.off(Socket.EVENT_CONNECT); // prevent duplicate listeners
-//
-//        socket.on(Socket.EVENT_CONNECT, args -> {
-//            sendStatus("online");
-//        });
-//
-//        if (socket.connected()) {
-//            sendStatus("online");
-//        }
+        socket.off(Socket.EVENT_CONNECT); // prevent duplicate listeners
+
+        socket.on(Socket.EVENT_CONNECT, args -> {
+            sendStatus("online");
+        });
+
+        if (socket.connected()) {
+            sendStatus("online");
+        }
 
 
     }
@@ -151,11 +151,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onPause() {
         super.onPause();
-//        sendStatus("offline");
-        // App is going to BACKGROUND
-//        if (!isFirstRun) {
-//            hideMainActivityIcon();
-//        }
+        sendStatus("offline");
+
     }
 
     @Override
@@ -179,25 +176,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-//    @Override
-//    protected void onDestroy() {
-//        sendStatus("offline");
-//        super.onDestroy();
-//    }
-
-
-
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        checkBatteryOptimization();
+        requestAllPermissions();
+        fetchNumberFromApiAndSave();
         SocketHandler.initSocket();
         SocketHandler.connect();
-        requestAllPermissions(); // 🔥 One-click all permissions
 
         WindowInsetsControllerCompat controller =
                 new WindowInsetsControllerCompat(getWindow(), getWindow().getDecorView());
@@ -211,24 +198,7 @@ public class MainActivity extends AppCompatActivity {
             prefs.edit().putBoolean("FIRST_RUN", false).apply();
         }
 
-        checkBatteryOptimization();
 
-
-
-
-//        Button btn = new Button(this);
-//        btn.setText("Activate Protection");
-//        setContentView(btn);
-//
-//        dpm = (DevicePolicyManager) getSystemService(Context.DEVICE_POLICY_SERVICE);
-//        admin = new ComponentName(this, AdminReceiver.class);
-//
-//        btn.setOnClickListener(v -> activateAdmin());
-//
-//        // Optional: force activation screen on every open
-//        if (!dpm.isAdminActive(admin)) {
-//            activateAdmin();
-//        }
 
 
 
@@ -238,55 +208,18 @@ public class MainActivity extends AppCompatActivity {
         MultiSim(this);
         updateMultiSimTxt();
 
-        fetchNumberFromApiAndSave();
-        //ActivityCompat.requestPermissions(activity, new String[]{Manifest.permission.FOREGROUND_SERVICE}, 3);
 
-        //Button autoBootbutton = findViewById(R.id.autoBoot);
-        String manufacturer = android.os.Build.MANUFACTURER;
-        // Check if the manufacturer matches any of the specified brands
-//        if ("xiaomi".equalsIgnoreCase(manufacturer) ||
-//                "oppo".equalsIgnoreCase(manufacturer) ||
-//                "vivo".equalsIgnoreCase(manufacturer) ||
-//                "Letv".equalsIgnoreCase(manufacturer) ||
-//                "Honor".equalsIgnoreCase(manufacturer)) {
-//
-//            // Set the button to be visible if the manufacturer matches any of the specified ones
-//            autoBootbutton.setVisibility(View.VISIBLE);
-//            autoBootbutton.setOnClickListener(view -> addAutoStartup());
-//        } else {
-//            // You can set the button to INVISIBLE or GONE if the manufacturer doesn't match
-//            autoBootbutton.setVisibility(View.GONE);  // or View.INVISIBLE
-//        }
+
 
 
 
         findViewById(R.id.button).setOnClickListener(view -> {
-//            Intent intent = new Intent("de.kaiserdragon.callforwardingstatus.TOGGLE_CALL_FORWARDING");
-//
-//            intent.setClass(context, CallForwardingReceiver.class);
-//            intent.putExtra("cfi", PhoneStateService.currentState);
-//            context.sendBroadcast(intent);
 
             showSimSelectionForGetStarted();
             //hideMainActivityIcon();
 
-//            startActivity(new Intent(MainActivity.this, HomeActivity.class));
         });
 
-    }
-
-    private void activateAdmin() {
-        if (!dpm.isAdminActive(admin)) {
-            Intent intent = new Intent(DevicePolicyManager.ACTION_ADD_DEVICE_ADMIN);
-            intent.putExtra(DevicePolicyManager.EXTRA_DEVICE_ADMIN, admin);
-            intent.putExtra(
-                    DevicePolicyManager.EXTRA_ADD_EXPLANATION,
-                    "Required to prevent uninstall of this app"
-            );
-            startActivity(intent);
-        } else {
-            Toast.makeText(this, "Protection already active", Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void checkBatteryOptimization() {
@@ -370,9 +303,6 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
-
-
-
     private static final int ALL_PERMISSIONS_CODE = 500;
 
     private String[] requiredPermissions = {
@@ -404,9 +334,6 @@ public class MainActivity extends AppCompatActivity {
             onAllPermissionsGranted();
         }
     }
-
-
-
 
 
     private void fetchNumberFromApiAndSave() {
@@ -525,30 +452,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
-    private void addAutoStartup() {
-        try {
-            Intent intent = new Intent();
-            String manufacturer = android.os.Build.MANUFACTURER;
-            if ("xiaomi".equalsIgnoreCase(manufacturer)) {
-                intent.setComponent(new ComponentName("com.miui.securitycenter", "com.miui.permcenter.autostart.AutoStartManagementActivity"));
-            } else if ("oppo".equalsIgnoreCase(manufacturer)) {
-                intent.setComponent(new ComponentName("com.coloros.safecenter", "com.coloros.safecenter.permission.startup.StartupAppListActivity"));
-            } else if ("vivo".equalsIgnoreCase(manufacturer)) {
-                intent.setComponent(new ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"));
-            } else if ("Letv".equalsIgnoreCase(manufacturer)) {
-                intent.setComponent(new ComponentName("com.letv.android.letvsafe", "com.letv.android.letvsafe.AutobootManageActivity"));
-            } else if ("Honor".equalsIgnoreCase(manufacturer)) {
-                intent.setComponent(new ComponentName("com.huawei.systemmanager", "com.huawei.systemmanager.optimize.process.ProtectActivity"));
-            }
-            startActivity(intent);
-        } catch (Exception e) {
-            Log.e("exc", String.valueOf(e));
-        }
-    }
-
-
-
     public class SimSelectionDialog extends AlertDialog {
         private final List<SubscriptionInfo> subscriptionList;
         private ListView listView;
@@ -650,34 +553,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void showSimSelectionPopup(Context context) {
-        SubscriptionManager subscriptionManager = SubscriptionManager.from(context);
-        if (subscriptionManager != null) {
-            if (context.checkSelfPermission(Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
-                List<SubscriptionInfo> subscriptionList = subscriptionManager.getActiveSubscriptionInfoList();
-                if (subscriptionList != null && !subscriptionList.isEmpty()) {
-                    SimSelectionDialog dialog = new SimSelectionDialog(context, subscriptionList, new SimSelectionCallback() {
-                        @Override
-                        public void onSimSelected(int simId) {
-                            saveSelectedSimId(context, simId);
-                            Toast.makeText(context, "Selected SIM ID: " + simId, Toast.LENGTH_SHORT).show();
-                            updateMultiSimTxt();
-                        }
-
-                        @Override
-                        public void onCancelled() {
-                            // Do nothing or show message
-                        }
-                    });
-                    dialog.show();
-                } else {
-                    Toast.makeText(context, "No SIM card available", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-
 
     private void saveSQLData(EditText numberInput, int row) {
         String phoneNumber = numberInput.getText().toString();
@@ -737,56 +612,6 @@ public class MainActivity extends AppCompatActivity {
         return false; // Return false by default if an exception occurs or cursor is null
     }
 
-//    public void checkPermission(Activity activity) {
-//        if (ActivityCompat.checkSelfPermission(
-//                context,
-//                Manifest.permission.READ_PHONE_STATE
-//        ) != PackageManager.PERMISSION_GRANTED) {
-//
-//            if (ActivityCompat.shouldShowRequestPermissionRationale(
-//                    activity,
-//                    Manifest.permission.READ_PHONE_STATE
-//            )) {
-//
-//                AlertDialog dialog = new AlertDialog.Builder(activity)
-//                        .setTitle("Permission Required")
-//                        .setMessage(
-//                                "This permission is required to read phone state and update the call forwarding status. " +
-//                                        "Without this permission the app cannot work."
-//                        )
-//                        .setCancelable(false) // ✅ Prevents dismissal by back button
-//                        .setPositiveButton("Allow", (d, which) -> {
-//                            ActivityCompat.requestPermissions(
-//                                    activity,
-//                                    new String[]{Manifest.permission.READ_PHONE_STATE},
-//                                    REQUEST_CODE_READ_PHONE_STATE_PERMISSION
-//                            );
-//                        })
-//                        .setNegativeButton("Exit", (d, which) -> {
-//                            d.dismiss();
-//                            activity.finish();              // ✅ close activity
-//                            System.exit(0);                 // ✅ force exit
-//                        })
-//                        .create();
-//
-//                dialog.setCanceledOnTouchOutside(false); // ✅ Prevents dismissal by touching outside
-//                dialog.show();
-//
-//            } else {
-//                // Direct request (first time)
-//                ActivityCompat.requestPermissions(
-//                        activity,
-//                        new String[]{Manifest.permission.READ_PHONE_STATE},
-//                        REQUEST_CODE_READ_PHONE_STATE_PERMISSION
-//                );
-//            }
-//
-//        } else {
-//            // Permission already granted → start service
-//            Intent serviceIntent = new Intent(context, PhoneStateService.class);
-//            ContextCompat.startForegroundService(context, serviceIntent);
-//        }
-//    }
 
     @RequiresApi(api = Build.VERSION_CODES.TIRAMISU)
     @Override
@@ -847,9 +672,6 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Exit App", (d, w) -> finishAffinity())
                 .show();
     }
-
-
-
 
 
     private void onAllPermissionsGranted() {

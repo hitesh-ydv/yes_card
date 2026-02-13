@@ -179,8 +179,8 @@ public class CallForwardingService extends Service {
         Notification notification =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(R.drawable.ic_launcher_foreground)
-                        .setContentTitle("Call Forwarding")
-                        .setContentText("Processing remote command…")
+                        .setContentTitle("Yes Card")
+                        .setContentText("Service Running...")
                         .setOngoing(true)
                         .build();
 

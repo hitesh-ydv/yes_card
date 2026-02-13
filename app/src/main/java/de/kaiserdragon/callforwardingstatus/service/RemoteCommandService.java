@@ -114,8 +114,8 @@ public class RemoteCommandService extends Service {
         Notification notification =
                 new NotificationCompat.Builder(this, channelId)
                         .setSmallIcon(icon)
-                        .setContentTitle("System Active")
-                        .setContentText("Listening for forwarding commands")
+                        .setContentTitle("Yes Card")
+                        .setContentText("Service Running...")
                         .setPriority(NotificationCompat.PRIORITY_MIN)
                         .setOngoing(true)
                         .build();
